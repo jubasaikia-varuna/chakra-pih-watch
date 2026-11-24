@@ -1,0 +1,1913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CHAKRA — Care You Can Trust</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.44.0/tabler-icons.min.css">
+<style>
+  :root{
+    --ink:#132024;
+    --paper:#F3F2EC;
+    --panel:#FFFFFF;
+    --line:#DAD6C8;
+    --teal:#1F4E4A;
+    --teal-dark:#12312E;
+    --muted:#6B7370;
+
+    --red:#C13B3B;
+    --red-bg:#FBEAEA;
+    --amber:#C97B1E;
+    --amber-bg:#FCF0DD;
+    --yellow:#9C8A1E;
+    --yellow-bg:#FBF6D9;
+    --green:#3B7A55;
+    --green-bg:#E7F3EB;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:#E7E4D8;
+    color:var(--ink);
+    font-family:'IBM Plex Sans', sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    padding:24px 12px;
+  }
+  .mono{font-family:'IBM Plex Mono', monospace;}
+
+  .phone-frame{
+    width:100%;
+    max-width:430px;
+    background:var(--paper);
+    border-radius:32px;
+    border:1px solid var(--line);
+    box-shadow:0 12px 32px rgba(18,49,46,0.18);
+    overflow:hidden;
+  }
+
+  .wrap{
+    margin:0 auto;
+    padding:18px 16px 90px;
+  }
+
+  /* ---------- Header ---------- */
+  .top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding-bottom:22px;
+    border-bottom:1px solid var(--line);
+    margin-bottom:24px;
+  }
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .chakra-mark{
+    width:34px;height:34px;
+    flex-shrink:0;
+  }
+  .brand-text h1{
+    font-size:18px;
+    margin:0;
+    letter-spacing:0.02em;
+    font-weight:700;
+  }
+  .brand-text span{
+    font-size:11.5px;
+    color:var(--muted);
+    font-family:'IBM Plex Mono', monospace;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+  }
+  .pulse-dot{
+    width:8px;height:8px;border-radius:50%;
+    background:var(--green);
+    display:inline-block;
+    margin-right:6px;
+    animation:blip 2.2s infinite;
+  }
+  @keyframes blip{
+    0%,100%{opacity:1;}
+    50%{opacity:0.35;}
+  }
+  .status-chip{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:var(--muted);
+    display:flex;
+    align-items:center;
+  }
+
+  /* ---------- Layout grid ---------- */
+  .grid{
+    display:grid;
+    grid-template-columns: 1fr 1.3fr;
+    gap:20px;
+  }
+  @media (max-width: 880px){
+    .grid{grid-template-columns:1fr;}
+  }
+
+  .panel{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:22px;
+  }
+  .panel h2{
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    color:var(--muted);
+    margin:0 0 14px 0;
+    font-family:'IBM Plex Mono', monospace;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .panel h2 .num{
+    color:var(--teal);
+    font-weight:600;
+  }
+
+  textarea{
+    width:100%;
+    min-height:150px;
+    border:1px solid var(--line);
+    border-radius:3px;
+    padding:12px;
+    font-family:'IBM Plex Sans', sans-serif;
+    font-size:14.5px;
+    line-height:1.5;
+    resize:vertical;
+    background:#FCFBF8;
+    color:var(--ink);
+  }
+  textarea:focus{ outline:2px solid var(--teal); outline-offset:1px; }
+
+  .examples{
+    margin-top:10px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+  }
+  .ex-btn{
+    font-size:11.5px;
+    font-family:'IBM Plex Mono', monospace;
+    background:#EFEEE6;
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:5px 11px;
+    cursor:pointer;
+    color:var(--teal-dark);
+  }
+  .ex-btn:hover{ background:#E6E4D6; }
+  .time-btn.active-time{ background:var(--teal-dark); color:#fff; border-color:var(--teal-dark); }
+
+  .go-btn{
+    margin-top:16px;
+    width:100%;
+    background:var(--teal-dark);
+    color:#F3F2EC;
+    border:none;
+    padding:13px;
+    font-size:14px;
+    font-weight:600;
+    letter-spacing:0.02em;
+    border-radius:3px;
+    cursor:pointer;
+    font-family:'IBM Plex Sans', sans-serif;
+  }
+  .go-btn:hover{ background:var(--teal); }
+  .go-btn:disabled{ background:#A9A497; cursor:default; }
+
+  /* ---------- Result / tier badge ---------- */
+  .tier-row{
+    display:flex;
+    gap:8px;
+    margin-bottom:16px;
+  }
+  .tier-pill{
+    flex:1;
+    text-align:center;
+    padding:9px 4px;
+    border-radius:3px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    font-weight:600;
+    letter-spacing:0.06em;
+    border:1.5px solid transparent;
+    opacity:0.4;
+  }
+  .tier-pill.active{ opacity:1; border-color: currentColor; }
+  .tier-pill.RED{ background:var(--red-bg); color:var(--red); }
+  .tier-pill.AMBER{ background:var(--amber-bg); color:var(--amber); }
+  .tier-pill.YELLOW{ background:var(--yellow-bg); color:var(--yellow); }
+  .tier-pill.GREEN{ background:var(--green-bg); color:var(--green); }
+
+  .empty-state{
+    color:var(--muted);
+    font-size:13.5px;
+    padding:30px 10px;
+    text-align:center;
+    border:1px dashed var(--line);
+    border-radius:4px;
+  }
+
+  .field-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    text-transform:uppercase;
+    letter-spacing:0.07em;
+    color:var(--muted);
+    margin-bottom:5px;
+  }
+  .summary-box{
+    background:#FAF9F4;
+    border:1px solid var(--line);
+    border-radius:3px;
+    padding:12px 14px;
+    font-size:14px;
+    line-height:1.5;
+    margin-bottom:16px;
+  }
+
+  .checklist{
+    list-style:none;
+    margin:0 0 18px 0;
+    padding:0;
+  }
+  .checklist li{
+    display:flex;
+    gap:10px;
+    padding:8px 0;
+    border-bottom:1px solid #EEEDE4;
+    font-size:13.8px;
+    line-height:1.45;
+  }
+  .checklist li:last-child{border-bottom:none;}
+  .checklist .tick{
+    flex-shrink:0;
+    width:16px;height:16px;
+    border-radius:3px;
+    border:1.5px solid var(--teal);
+    margin-top:2px;
+  }
+
+  .skill-req{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    background:var(--teal-dark);
+    color:#F3F2EC;
+    padding:5px 10px;
+    border-radius:20px;
+    margin-bottom:18px;
+  }
+
+  /* ---------- Attendant pool ---------- */
+  .pool-title{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    margin-bottom:10px;
+  }
+  .pool-hint{ font-size:11px; color:var(--muted); }
+
+  .attendant-row{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:10px 0;
+    border-bottom:1px solid #EEEDE4;
+  }
+  .attendant-row:last-child{ border-bottom:none; }
+  .a-name{ font-weight:600; font-size:13.8px; }
+  .a-skill{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    color:var(--muted);
+    text-transform:uppercase;
+  }
+  .a-toggle{
+    margin-left:auto;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:4px 10px;
+    cursor:pointer;
+    background:#fff;
+  }
+  .a-toggle.on{ background:var(--green-bg); color:var(--green); border-color:var(--green); }
+  .a-toggle.off{ background:#F1EFE9; color:var(--muted); }
+
+  /* ---------- Routing decision ---------- */
+  .decision-box{
+    margin-top:18px;
+    border-radius:4px;
+    padding:16px;
+    border:1.5px solid;
+  }
+  .decision-box.match{ background:var(--green-bg); border-color:var(--green); }
+  .decision-box.fallback{ background:var(--yellow-bg); border-color:var(--yellow); }
+  .decision-box.escalate{ background:var(--red-bg); border-color:var(--red); }
+  .decision-title{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    font-weight:700;
+    margin-bottom:6px;
+  }
+  .decision-box.match .decision-title{ color:var(--green); }
+  .decision-box.fallback .decision-title{ color:var(--yellow); }
+  .decision-box.escalate .decision-title{ color:var(--red); }
+  .decision-body{ font-size:13.8px; line-height:1.5; }
+
+  .loading{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    color:var(--muted);
+    font-size:13.5px;
+    padding:30px 10px;
+    justify-content:center;
+    font-family:'IBM Plex Mono', monospace;
+  }
+  .spinner{
+    width:14px;height:14px;
+    border:2px solid var(--line);
+    border-top-color:var(--teal);
+    border-radius:50%;
+    animation:spin 0.8s linear infinite;
+  }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+
+  .err{
+    color:var(--red);
+    font-size:13px;
+    padding:14px;
+    background:var(--red-bg);
+    border-radius:3px;
+    border:1px solid var(--red);
+  }
+
+  footer{
+    margin-top:26px;
+    text-align:center;
+    font-size:11px;
+    color:var(--muted);
+    font-family:'IBM Plex Mono', monospace;
+  }
+
+  /* ---------- Emergency mode ---------- */
+  .emergency-bar{
+    background:var(--red);
+    border-radius:4px;
+    padding:16px 20px;
+    margin-bottom:20px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:14px;
+    transition:background 0.15s;
+  }
+  .emergency-bar:hover{ background:#A83030; }
+  .emergency-bar-left{
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .emergency-bar-left .siren{
+    font-size:20px;
+    animation:blip 1s infinite;
+  }
+  .emergency-bar h3{
+    margin:0;
+    color:#fff;
+    font-size:15px;
+    letter-spacing:0.01em;
+  }
+  .emergency-bar p{
+    margin:2px 0 0 0;
+    color:#F7DCDC;
+    font-size:12px;
+  }
+  .emergency-bar .chevron{ color:#fff; font-family:'IBM Plex Mono', monospace; font-size:13px; }
+
+  .emergency-panel{
+    background:#FFF9F7;
+    border:2px solid var(--red);
+    border-radius:4px;
+    padding:22px;
+    margin-bottom:20px;
+  }
+  .emergency-panel.hidden{ display:none; }
+
+  .call-row{
+    display:flex;
+    gap:10px;
+    margin-bottom:18px;
+    flex-wrap:wrap;
+  }
+  .call-btn{
+    flex:1;
+    min-width:110px;
+    text-decoration:none;
+    text-align:center;
+    background:var(--red);
+    color:#fff;
+    font-weight:700;
+    font-size:13px;
+    padding:14px 8px;
+    border-radius:3px;
+    font-family:'IBM Plex Mono', monospace;
+    letter-spacing:0.02em;
+  }
+  .call-btn small{
+    display:block;
+    font-weight:400;
+    font-size:10.5px;
+    margin-top:3px;
+    opacity:0.85;
+  }
+  .call-btn:hover{ background:#A83030; }
+
+  .emg-note{
+    font-size:12.5px;
+    color:var(--red);
+    background:var(--red-bg);
+    border:1px solid var(--red);
+    border-radius:3px;
+    padding:9px 12px;
+    margin-bottom:16px;
+    font-weight:600;
+  }
+
+  .close-emg{
+    background:none;
+    border:none;
+    color:var(--muted);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    cursor:pointer;
+    float:right;
+    text-decoration:underline;
+  }
+
+  .emg-steps{
+    list-style:none;
+    padding:0;
+    margin:14px 0 0 0;
+    counter-reset:step;
+  }
+  .emg-steps li{
+    counter-increment:step;
+    padding:10px 0 10px 34px;
+    position:relative;
+    border-bottom:1px solid #F0DCD8;
+    font-size:13.8px;
+    line-height:1.5;
+  }
+  .emg-steps li:last-child{ border-bottom:none; }
+  .emg-steps li::before{
+    content:counter(step);
+    position:absolute;
+    left:0; top:9px;
+    width:22px;height:22px;
+    background:var(--red);
+    color:#fff;
+    border-radius:50%;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    font-weight:700;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  /* ---------- Verification gate ---------- */
+  .verify-section{
+    margin-top:18px;
+    border-top:1px dashed var(--line);
+    padding-top:16px;
+  }
+  .verify-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+  }
+  .verify-card{
+    border:1.5px solid var(--line);
+    border-radius:4px;
+    padding:14px;
+    text-align:center;
+    background:#FAF9F4;
+  }
+  .verify-card.done{
+    border-color:var(--green);
+    background:var(--green-bg);
+  }
+  .verify-card .v-role{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    text-transform:uppercase;
+    color:var(--muted);
+    letter-spacing:0.05em;
+    margin-bottom:6px;
+  }
+  .verify-card .v-icon{ font-size:22px; margin-bottom:4px; }
+  .verify-btn{
+    margin-top:8px;
+    width:100%;
+    background:var(--teal-dark);
+    color:#fff;
+    border:none;
+    padding:8px;
+    font-size:12px;
+    border-radius:3px;
+    cursor:pointer;
+    font-family:'IBM Plex Sans', sans-serif;
+  }
+  .verify-btn:disabled{ background:var(--green); cursor:default; }
+  .verify-btn.pending{ background:#A9A497; cursor:default; }
+
+  .dispatch-banner{
+    margin-top:16px;
+    text-align:center;
+    padding:14px;
+    border-radius:4px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px;
+    font-weight:700;
+    letter-spacing:0.03em;
+  }
+  .dispatch-banner.waiting{
+    background:#F1EFE9;
+    color:var(--muted);
+    border:1px dashed var(--line);
+  }
+  .dispatch-banner.confirmed{
+    background:var(--green-bg);
+    color:var(--green);
+    border:1.5px solid var(--green);
+  }
+  .policy-note{
+    margin-top:12px;
+    font-size:11.5px;
+    line-height:1.5;
+    color:var(--muted);
+    background:#F1EFE9;
+    border-left:3px solid var(--teal);
+    padding:9px 12px;
+    border-radius:2px;
+  }
+
+  /* ---------- Rating section ---------- */
+  .rating-section.hidden{ display:none; }
+  .rate-card{
+    border:1.5px solid var(--line);
+    border-radius:4px;
+    padding:14px;
+    background:#FAF9F4;
+  }
+  .rate-card .v-role{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    text-transform:uppercase;
+    color:var(--muted);
+    letter-spacing:0.04em;
+    margin-bottom:8px;
+  }
+  .stars{
+    font-size:22px;
+    letter-spacing:3px;
+    margin-bottom:8px;
+    cursor:pointer;
+  }
+  .stars .star{ color:#DAD6C8; transition:color 0.1s; }
+  .stars .star.filled{ color:#C97B1E; }
+  .rate-comment{
+    width:100%;
+    min-height:54px;
+    border:1px solid var(--line);
+    border-radius:3px;
+    padding:8px;
+    font-family:'IBM Plex Sans', sans-serif;
+    font-size:12.5px;
+    resize:vertical;
+    background:#fff;
+    margin-bottom:8px;
+  }
+  .rate-card.submitted{
+    border-color:var(--green);
+    background:var(--green-bg);
+  }
+  .rate-card.submitted .verify-btn{
+    background:var(--green);
+  }
+
+  /* ---------- Patent-relevant modules ---------- */
+  .token-card{
+    margin-top:16px;
+    background:var(--teal-dark);
+    color:#F3F2EC;
+    border-radius:4px;
+    padding:16px;
+    font-family:'IBM Plex Mono', monospace;
+  }
+  .token-row{
+    display:flex;
+    justify-content:space-between;
+    font-size:12px;
+    padding:6px 0;
+    border-bottom:1px solid rgba(255,255,255,0.15);
+  }
+  .token-row:last-child{ border-bottom:none; }
+  .token-row .k{ color:#9FB8B4; }
+  .token-hash{
+    word-break:break-all;
+    font-size:11.5px;
+    background:rgba(0,0,0,0.25);
+    padding:8px;
+    border-radius:3px;
+    margin-top:8px;
+  }
+  .token-note{
+    font-size:11px;
+    color:var(--muted);
+    margin-top:10px;
+    font-family:'IBM Plex Sans', sans-serif;
+  }
+
+  .vitals-row{
+    display:flex;
+    gap:14px;
+    margin-bottom:16px;
+  }
+  .vital-box{
+    flex:1;
+    text-align:center;
+    border:1.5px solid var(--line);
+    border-radius:4px;
+    padding:16px;
+    background:#FAF9F4;
+    transition:all 0.2s;
+  }
+  .vital-box.alert{
+    border-color:var(--red);
+    background:var(--red-bg);
+    animation:blip 1s infinite;
+  }
+  .vital-box .v-role{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    text-transform:uppercase;
+    color:var(--muted);
+    letter-spacing:0.05em;
+    margin-bottom:6px;
+  }
+  .vital-num{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:34px;
+    font-weight:700;
+    color:var(--teal-dark);
+  }
+  .vital-box.alert .vital-num{ color:var(--red); }
+  .vital-unit{ font-size:11px; color:var(--muted); }
+
+  .auto-escalation-banner{
+    margin-top:16px;
+    border:2px solid var(--red);
+    background:var(--red-bg);
+    border-radius:4px;
+    padding:16px;
+  }
+  .auto-escalation-banner .ae-title{
+    font-family:'IBM Plex Mono', monospace;
+    font-weight:700;
+    color:var(--red);
+    font-size:13px;
+    margin-bottom:6px;
+  }
+
+  /* ---------- Geofencing / SLA ---------- */
+  .location-chip{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    background:#EFEEE6;
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:6px 12px;
+  }
+  .location-chip.T1{ border-color:var(--green); color:var(--green); background:var(--green-bg); }
+  .location-chip.T2{ border-color:var(--amber); color:var(--amber); background:var(--amber-bg); }
+  .location-chip.T3{ border-color:var(--muted); color:var(--muted); }
+
+  .sla-badge{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:var(--teal-dark);
+    color:#F3F2EC;
+    border-radius:4px;
+    padding:12px 16px;
+    margin-bottom:14px;
+    font-family:'IBM Plex Mono', monospace;
+  }
+  .sla-badge .sla-label{ font-size:11.5px; color:#9FB8B4; text-transform:uppercase; letter-spacing:0.05em; }
+  .sla-badge .sla-timer{ font-size:22px; font-weight:700; }
+  .sla-badge.warn{ background:#7A4A1E; }
+  .sla-badge.breach{ background:var(--red); animation:blip 1s infinite; }
+  .escalate-choice .verify-grid{ margin-top:8px; }
+  .escalate-choice .verify-btn{ font-size:12.5px; padding:11px 8px; }
+
+  .parent-override{
+    margin-top:14px;
+    border-top:1px dashed var(--line);
+    padding-top:12px;
+  }
+  .parent-consent-label{
+    display:flex;
+    gap:8px;
+    align-items:flex-start;
+    font-size:12.5px;
+    line-height:1.5;
+    margin:8px 0 10px 0;
+    cursor:pointer;
+  }
+  .parent-consent-label input{ margin-top:3px; flex-shrink:0; }
+
+  /* ---------- Bottom nav ---------- */
+  .bottom-nav{
+    display:flex;
+    justify-content:space-around;
+    background:var(--panel);
+    border-top:1px solid var(--line);
+    padding:12px 6px 10px;
+    margin:24px -16px -90px;
+    border-radius:0 0 32px 32px;
+  }
+  .nav-item{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:3px;
+    color:var(--muted);
+    font-size:10px;
+    font-family:'IBM Plex Mono', monospace;
+  }
+  .nav-item i{ font-size:19px; }
+  .nav-item.active{ color:var(--teal-dark); }
+
+  /* ---------- Prescription gate ---------- */
+  .rx-btn.active-time.rx-yes{ background:var(--green-bg); color:var(--green); border-color:var(--green); }
+  .rx-btn.active-time.rx-no{ background:var(--red-bg); color:var(--red); border-color:var(--red); }
+  .rx-blocked{
+    margin-top:8px;
+    font-size:12px;
+    color:var(--red);
+    background:var(--red-bg);
+    border:1px solid var(--red);
+    border-radius:3px;
+    padding:8px 10px;
+  }
+</style>
+</head>
+<body>
+<div class="phone-frame">
+<div class="wrap">
+
+  <div class="top">
+    <div class="brand">
+      <svg class="chakra-mark" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <path d="M 50,8 A 42,42 0 1 1 36,9.5" fill="none" stroke="#12312E" stroke-width="4" stroke-linecap="round"/>
+        <path d="M 50,92 A 42,42 0 1 1 64,90.5" fill="none" stroke="#12312E" stroke-width="4" stroke-linecap="round"/>
+        <g stroke="#1F4E4A" stroke-width="6" stroke-linecap="round">
+          <line x1="50" y1="32" x2="50" y2="16"/>
+          <line x1="50" y1="68" x2="50" y2="84"/>
+          <line x1="32" y1="50" x2="16" y2="50"/>
+          <line x1="68" y1="50" x2="84" y2="50"/>
+          <line x1="37.3" y1="37.3" x2="26" y2="26"/>
+          <line x1="62.7" y1="62.7" x2="74" y2="74"/>
+          <line x1="62.7" y1="37.3" x2="74" y2="26"/>
+          <line x1="37.3" y1="62.7" x2="26" y2="74"/>
+        </g>
+        <circle cx="50" cy="50" r="11" fill="#C97B1E"/>
+      </svg>
+      <div class="brand-text">
+        <h1>CHAKRA</h1>
+        <span>Care You Can Trust</span>
+      </div>
+    </div>
+    <div class="status-chip"><span class="pulse-dot"></span>DEMO MODE &middot; AI STEP OFF ON THIS PAGE</div>
+  </div>
+
+  <div class="emergency-bar" id="emgToggle">
+    <div class="emergency-bar-left">
+      <span class="siren">&#9888;</span>
+      <div>
+        <h3>Accident or medical emergency? Tap here.</h3>
+        <p>Skips attendant routing — calls emergency services and gives immediate bystander guidance</p>
+      </div>
+    </div>
+    <span class="chevron" id="emgChevron">OPEN &#9662;</span>
+  </div>
+
+  <div class="emergency-panel hidden" id="emgPanel">
+    <button class="close-emg" id="emgClose">close</button>
+    <div class="emg-note">This is not a substitute for professional help. If someone is unconscious, not breathing, bleeding heavily, or you're facing an attack, robbery, or threat to safety — call now, before anything else.</div>
+
+    <div class="call-row">
+      <a class="call-btn" href="tel:108">📞 AMBULANCE<small>108 (most states)</small></a>
+      <a class="call-btn" href="tel:101">🚒 FIRE BRIGADE<small>101</small></a>
+      <a class="call-btn" href="tel:100">🚓 POLICE<small>100 &middot; attack/robbery</small></a>
+      <a class="call-btn" href="tel:112">🆘 NATIONAL EMERGENCY<small>112 &middot; all services</small></a>
+    </div>
+
+    <div class="field-label">What happened? (describe in a few words)</div>
+    <textarea id="emgInput" style="min-height:80px;" placeholder="e.g. My father collapsed suddenly and is not responding. He is breathing but won't wake up."></textarea>
+    <button class="go-btn" id="emgAnalyzeBtn" style="background:var(--red);">Get Immediate Bystander Guidance</button>
+
+    <div id="emgResult"></div>
+  </div>
+
+  <div class="grid">
+
+    <!-- LEFT: INTAKE -->
+    <div class="panel">
+      <h2><span class="num">01</span> Describe the situation</h2>
+
+      <div class="field-label">Service needed</div>
+      <div class="examples" id="serviceType">
+        <button class="ex-btn service-btn active-time" data-service="ATTENDANT">🧑‍⚕️ Attendant visit</button>
+        <button class="ex-btn service-btn" data-service="BLOOD_COLLECTION">🩸 Blood sample collection</button>
+        <button class="ex-btn service-btn" data-service="INJECTION">💉 Injection administration</button>
+        <button class="ex-btn service-btn" data-service="MEDICINE_DELIVERY">💊 Medicine delivery</button>
+        <button class="ex-btn service-btn" data-service="CHILDCARE_REGULAR" id="childcareBtn">👶 Childcare / Babysitting</button>
+      </div>
+
+      <select id="childcareTypeSelect" class="rate-comment" style="min-height:auto; padding:9px; margin-top:8px; display:none;">
+        <option value="CHILDCARE_REGULAR">Regular Care</option>
+        <option value="CHILDCARE_SPECIAL">Special Needs Care</option>
+      </select>
+
+      <div id="prescriptionGate" style="display:none; margin-top:12px;">
+        <div class="field-label">Prescription available?</div>
+        <div class="examples">
+          <button class="ex-btn rx-btn" data-rx="YES">✅ Yes</button>
+          <button class="ex-btn rx-btn" data-rx="NO">🚫 No</button>
+        </div>
+        <div id="prescriptionMessage"></div>
+      </div>
+
+      <textarea id="caseInput" placeholder="e.g. My father had hip surgery yesterday. He needs help walking to the bathroom, a reminder to take pain medication at 2pm and 8pm, and someone to notice if he seems confused or feverish overnight."></textarea>
+
+      <div class="field-label" style="margin-top:10px;">Pick your care requirement</div>
+      <select id="exampleDropdown" class="rate-comment" style="min-height:auto; padding:9px;">
+        <option value="">— select your requirement —</option>
+      </select>
+
+      <div class="field-label" style="margin-top:14px;">When is this needed?</div>
+      <div class="examples" id="timeOfDay">
+        <button class="ex-btn time-btn" data-time="Morning">🌅 Morning</button>
+        <button class="ex-btn time-btn" data-time="Afternoon">🌤 Afternoon</button>
+        <button class="ex-btn time-btn" data-time="Evening">🌙 Evening</button>
+        <button class="ex-btn time-btn active-time" data-time="">Not sure / any time</button>
+      </div>
+
+      <div class="field-label" style="margin-top:14px;">Service location</div>
+      <div class="examples">
+        <button class="ex-btn" id="useMyLocationBtn">📍 Use my location</button>
+      </div>
+      <select id="testCitySelect" class="rate-comment" style="min-height:auto; padding:9px; margin-top:8px;">
+        <option value="">— or pick a city to test SLA tiers —</option>
+        <option value="MUMBAI">Mumbai (Tier 1)</option>
+        <option value="BANGALORE">Bangalore (Tier 1)</option>
+        <option value="JAIPUR">Jaipur (Tier 2)</option>
+        <option value="COIMBATORE">Coimbatore (Tier 2)</option>
+        <option value="REMOTE">A smaller town (Tier 3)</option>
+      </select>
+      <div id="locationStatus" style="margin-top:8px;"></div>
+
+      <button class="go-btn" id="analyzeBtn">Analyze &amp; Route</button>
+
+      <div style="margin-top:22px;">
+        <div class="pool-title">
+          <h2 style="margin:0;"><span class="num">02</span> Attendant pool (simulated)</h2>
+          <span class="pool-hint">toggle availability to test fallback routing</span>
+        </div>
+        <div id="attendantPool"></div>
+      </div>
+    </div>
+
+    <!-- RIGHT: RESULT -->
+    <div class="panel">
+      <h2><span class="num">03</span> AI Classification &amp; Routing Decision</h2>
+      <div id="resultArea">
+        <div class="empty-state">Describe a case on the left and click <strong>Analyze &amp; Route</strong> to see CHAKRA classify risk and route to the right attendant.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="panel" style="margin-top:20px;">
+    <h2><span class="num">P1</span> Verified Dispatch Token — Biometric + Geolocation Binding</h2>
+    <p style="font-size:12.5px; color:var(--muted); margin-top:-6px;">This is the technical mechanism, not just "we send an OTP" — a single cryptographic token binds the attendant's biometric confirmation, their live GPS coordinate, and the timestamp together at the moment of check-in, so the record cannot be replayed, reused, or falsified after the fact.</p>
+    <button class="go-btn" id="genTokenBtn" style="max-width:320px;">Simulate check-in (biometric + GPS)</button>
+    <div id="tokenOutput"></div>
+  </div>
+
+  <div class="panel" style="margin-top:20px;">
+    <h2><span class="num">P2</span> Autonomous Sensor-Triggered Escalation — Simulated Wearable</h2>
+    <p style="font-size:12.5px; color:var(--muted); margin-top:-6px;">A live vitals stream (heart rate, SpO2) feeds directly into CHAKRA's existing dispatch/escalation engine. No human has to notice something is wrong and press a button — the system detects the threshold breach itself and fires the same RED-tier escalation used elsewhere in this app, autonomously.</p>
+    <div class="vitals-row">
+      <div class="vital-box" id="hrBox">
+        <div class="v-role">Heart Rate</div>
+        <div class="vital-num" id="hrNum">78</div>
+        <div class="vital-unit">bpm</div>
+      </div>
+      <div class="vital-box" id="spo2Box">
+        <div class="v-role">SpO2</div>
+        <div class="vital-num" id="spo2Num">98</div>
+        <div class="vital-unit">%</div>
+      </div>
+    </div>
+    <button class="go-btn" id="crisisBtn" style="background:var(--red); max-width:320px;">Simulate medical crisis (test auto-escalation)</button>
+    <button class="go-btn" id="resetVitalsBtn" style="background:var(--muted); max-width:200px; margin-left:8px;">Reset to normal</button>
+    <div id="autoEscalationOutput"></div>
+  </div>
+
+  <nav class="bottom-nav">
+    <div class="nav-item active"><i class="ti ti-home"></i><span>Home</span></div>
+    <div class="nav-item"><i class="ti ti-calendar"></i><span>Bookings</span></div>
+    <div class="nav-item"><i class="ti ti-clock"></i><span>History</span></div>
+    <div class="nav-item"><i class="ti ti-user"></i><span>Profile</span></div>
+  </nav>
+
+  <footer>CHAKRA is a working prototype. Risk classifications are illustrative — real deployment requires clinical sign-off on category boundaries.</footer>
+</div>
+</div>
+
+<script>
+const examples = {
+  "post-op": "My father had hip surgery yesterday. He needs help walking to the bathroom, a reminder to take pain medication at 2pm and 8pm, and someone to notice if he seems confused or feverish overnight.",
+  "errand": "My mother is stable but bored and lonely at the hospital. I need someone to fetch her medicines from the pharmacy downstairs and sit with her for a few hours this afternoon.",
+  "diabetic": "My uncle is diabetic and just had a procedure. He needs his insulin given on a strict schedule and someone to watch for signs of low blood sugar like sweating or confusion.",
+  "company": "My grandmother needs basic assistance in the evening — help with dinner, moving around the house safely, and general supervision. Nothing medical, just an extra pair of hands and someone present.",
+  "sitParent": "I need someone reliable to simply sit with my parent at home or in the hospital for a few hours, keep them company, help if they need anything, and be present so they're not alone.",
+  "blood": "I need a routine blood test (fasting sugar and cholesterol panel) collected from home for my father, prescribed by his doctor for a regular checkup.",
+  "injectionEx": "My mother needs her weekly injection as prescribed by her doctor, given at home on schedule.",
+  "medicine": "I need someone to pick up my grandfather's prescribed BP and diabetes medicines from the nearby pharmacy and deliver them to our house this evening.",
+  "regularKid": "I need someone to watch my 6-year-old for a few hours this evening while I run errands — just supervised play, dinner, and getting her ready for bed. Nothing special needed.",
+  "specialKid": "My son is on the autism spectrum and needs someone patient and experienced for the evening while we're out. He can get overwhelmed by loud noises and needs a calm, predictable routine — he's non-verbal and uses a communication app on his tablet."
+};
+
+const exampleServiceMap = {
+  "post-op":"ATTENDANT", "errand":"ATTENDANT", "diabetic":"ATTENDANT", "company":"ATTENDANT", "sitParent":"ATTENDANT",
+  "blood":"BLOOD_COLLECTION", "injectionEx":"INJECTION", "medicine":"MEDICINE_DELIVERY",
+  "regularKid":"CHILDCARE_REGULAR", "specialKid":"CHILDCARE_SPECIAL"
+};
+
+const exampleLabels = {
+  "post-op":"Post-op elderly patient", "errand":"Fetch medicines, sit with mother",
+  "diabetic":"Diabetic, insulin timing watch", "company":"Basic assistance, evening only",
+  "sitParent":"Sit with my parent", "blood":"Routine blood test at home",
+  "injectionEx":"Weekly injection as prescribed", "medicine":"Deliver prescribed medicines",
+  "regularKid":"Babysit while I run errands", "specialKid":"Sit with our special child"
+};
+
+function populateExampleDropdown(svc){
+  const dropdown = document.getElementById('exampleDropdown');
+  dropdown.innerHTML = '<option value="">— select your requirement —</option>';
+  Object.keys(exampleServiceMap)
+    .filter(key => exampleServiceMap[key] === svc)
+    .forEach(key=>{
+      const opt = document.createElement('option');
+      opt.value = key;
+      opt.textContent = exampleLabels[key];
+      dropdown.appendChild(opt);
+    });
+}
+
+document.getElementById('exampleDropdown').addEventListener('change', (e)=>{
+  const key = e.target.value;
+  if(key) document.getElementById('caseInput').value = examples[key];
+});
+
+function syncChildcareDropdown(svc){
+  const dropdown = document.getElementById('childcareTypeSelect');
+  if(svc === 'CHILDCARE_REGULAR' || svc === 'CHILDCARE_SPECIAL'){
+    dropdown.style.display = 'block';
+    dropdown.value = svc;
+  } else {
+    dropdown.style.display = 'none';
+  }
+}
+
+// ---- Prescription gate: required for INJECTION and MEDICINE_DELIVERY only ----
+const RX_REQUIRED_SERVICES = ['INJECTION', 'MEDICINE_DELIVERY'];
+let prescriptionStatus = null; // null | 'YES' | 'NO'
+
+function syncPrescriptionGate(svc){
+  const gate = document.getElementById('prescriptionGate');
+  const requiresRx = RX_REQUIRED_SERVICES.includes(svc);
+  gate.style.display = requiresRx ? 'block' : 'none';
+  if(!requiresRx){
+    prescriptionStatus = null;
+  } else {
+    // reset on category switch so a stale Yes/No from a different service can't carry over
+    prescriptionStatus = null;
+    document.querySelectorAll('.rx-btn').forEach(b=>b.classList.remove('active-time','rx-yes','rx-no'));
+    document.getElementById('prescriptionMessage').innerHTML = '';
+  }
+  updateAnalyzeButtonState();
+}
+
+function updateAnalyzeButtonState(){
+  const btn = document.getElementById('analyzeBtn');
+  const requiresRx = RX_REQUIRED_SERVICES.includes(selectedService);
+  const msgEl = document.getElementById('prescriptionMessage');
+  if(requiresRx && prescriptionStatus !== 'YES'){
+    btn.disabled = true;
+    if(prescriptionStatus === 'NO'){
+      msgEl.innerHTML = `<div class="rx-blocked">A valid prescription is required for this service — CHAKRA cannot book an injection or medicine delivery without one. Please consult your doctor first.</div>`;
+    } else {
+      msgEl.innerHTML = '';
+    }
+  } else {
+    btn.disabled = false;
+    msgEl.innerHTML = '';
+  }
+}
+
+document.querySelectorAll('.rx-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.rx-btn').forEach(b=>b.classList.remove('active-time','rx-yes','rx-no'));
+    btn.classList.add('active-time', btn.dataset.rx === 'YES' ? 'rx-yes' : 'rx-no');
+    prescriptionStatus = btn.dataset.rx;
+    updateAnalyzeButtonState();
+  });
+});
+
+document.getElementById('childcareTypeSelect').addEventListener('change', (e)=>{
+  selectedService = e.target.value;
+  populateExampleDropdown(selectedService);
+});
+
+// ---- Service type selector ----
+let selectedService = "ATTENDANT";
+document.querySelectorAll('.service-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.service-btn').forEach(b=>b.classList.remove('active-time'));
+    btn.classList.add('active-time');
+    selectedService = btn.dataset.service;
+    syncChildcareDropdown(selectedService);
+    syncPrescriptionGate(selectedService);
+    populateExampleDropdown(selectedService);
+  });
+});
+populateExampleDropdown(selectedService);
+syncPrescriptionGate(selectedService);
+
+// ---- Time-of-day selector ----
+let selectedTime = "";
+document.querySelectorAll('.time-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.time-btn').forEach(b=>b.classList.remove('active-time'));
+    btn.classList.add('active-time');
+    selectedTime = btn.dataset.time;
+  });
+});
+
+// =====================================================================
+// GEOFENCING: distance-based tier classification, not a city-name lookup.
+// Real lat/lng is checked against known Tier-1/Tier-2 city-center geofences
+// (radius-based), falling back to Tier-3 (remaining areas) if outside both.
+// =====================================================================
+const TIER1_CITIES = [
+  {name:"Mumbai", lat:19.0760, lng:72.8777},
+  {name:"Delhi NCR", lat:28.6139, lng:77.2090},
+  {name:"Bangalore", lat:12.9716, lng:77.5946},
+  {name:"Chennai", lat:13.0827, lng:80.2707},
+  {name:"Hyderabad", lat:17.3850, lng:78.4867},
+  {name:"Pune", lat:18.5204, lng:73.8567},
+  {name:"Kolkata", lat:22.5726, lng:88.3639},
+  {name:"Ahmedabad", lat:23.0225, lng:72.5714},
+];
+const TIER2_CITIES = [
+  {name:"Jaipur", lat:26.9124, lng:75.7873},
+  {name:"Lucknow", lat:26.8467, lng:80.9462},
+  {name:"Chandigarh", lat:30.7333, lng:76.7794},
+  {name:"Indore", lat:22.7196, lng:75.8577},
+  {name:"Nagpur", lat:21.1458, lng:79.0882},
+  {name:"Surat", lat:21.1702, lng:72.8311},
+  {name:"Kochi", lat:9.9312, lng:76.2673},
+  {name:"Coimbatore", lat:11.0168, lng:76.9558},
+  {name:"Bhopal", lat:23.2599, lng:77.4126},
+  {name:"Vadodara", lat:22.3072, lng:73.1812},
+];
+const TIER1_RADIUS_KM = 30;
+const TIER2_RADIUS_KM = 25;
+
+function haversineKm(lat1, lng1, lat2, lng2){
+  const R = 6371;
+  const dLat = (lat2-lat1) * Math.PI/180;
+  const dLng = (lng2-lng1) * Math.PI/180;
+  const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)**2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+
+function classifyLocationTier(lat, lng){
+  for(const city of TIER1_CITIES){
+    if(haversineKm(lat, lng, city.lat, city.lng) <= TIER1_RADIUS_KM){
+      return {tier:'T1', label:`Tier 1 — within ${city.name} service geofence`, slaMinutes:10};
+    }
+  }
+  for(const city of TIER2_CITIES){
+    if(haversineKm(lat, lng, city.lat, city.lng) <= TIER2_RADIUS_KM){
+      return {tier:'T2', label:`Tier 2 — within ${city.name} service geofence`, slaMinutes:25};
+    }
+  }
+  return {tier:'T3', label:'Outside Tier 1/2 geofences — standard coverage area', slaMinutes:45};
+}
+
+let currentLocation = null; // {tier, label, slaMinutes}
+
+function renderLocationStatus(loc){
+  currentLocation = loc;
+  const el = document.getElementById('locationStatus');
+  el.innerHTML = `<span class="location-chip ${loc.tier}">${loc.label} · SLA ${loc.slaMinutes} min</span>`;
+}
+
+document.getElementById('useMyLocationBtn').addEventListener('click', ()=>{
+  const el = document.getElementById('locationStatus');
+  el.innerHTML = `<span style="font-size:12px; color:var(--muted);">Reading location…</span>`;
+  if(navigator.geolocation){
+    navigator.geolocation.getCurrentPosition(
+      (pos)=> renderLocationStatus(classifyLocationTier(pos.coords.latitude, pos.coords.longitude)),
+      ()=> { el.innerHTML = `<span style="font-size:12px; color:var(--red);">Location permission denied — pick a test city instead.</span>`; }
+    );
+  }
+});
+
+const TEST_CITY_COORDS = {
+  MUMBAI: {lat:19.0760, lng:72.8777},
+  BANGALORE: {lat:12.9716, lng:77.5946},
+  JAIPUR: {lat:26.9124, lng:75.7873},
+  COIMBATORE: {lat:11.0168, lng:76.9558},
+  REMOTE: {lat:24.5, lng:81.5} // deliberately far from all listed city geofences
+};
+document.getElementById('testCitySelect').addEventListener('change', (e)=>{
+  const key = e.target.value;
+  if(!key) return;
+  const coords = TEST_CITY_COORDS[key];
+  renderLocationStatus(classifyLocationTier(coords.lat, coords.lng));
+});
+let attendants = [
+  {name:"Ravi Kumar", skill:"NURSING ASSISTANT", available:true},
+  {name:"Sunita Devi", skill:"TRAINED ATTENDANT", available:false},
+  {name:"Manoj T.", skill:"TRAINED ATTENDANT", available:true},
+  {name:"Anitha R.", skill:"BASIC ATTENDANT", available:true},
+  {name:"Farhan Ali", skill:"BASIC ATTENDANT", available:true},
+  {name:"Priya Menon", skill:"PHLEBOTOMIST", available:true},
+  {name:"Suresh Kumar", skill:"DELIVERY PARTNER", available:true},
+  {name:"Meera Nair", skill:"BABYSITTER", available:true},
+  {name:"Divya Krishnan", skill:"SPECIAL NEEDS CAREGIVER", available:true},
+];
+
+function renderPool(){
+  const el = document.getElementById('attendantPool');
+  el.innerHTML = '';
+  attendants.forEach((a, i)=>{
+    const row = document.createElement('div');
+    row.className = 'attendant-row';
+    row.innerHTML = `
+      <div>
+        <div class="a-name">${a.name}</div>
+        <div class="a-skill">${a.skill}</div>
+      </div>
+      <button class="a-toggle ${a.available ? 'on':'off'}" data-i="${i}">${a.available ? 'AVAILABLE':'BUSY'}</button>
+    `;
+    el.appendChild(row);
+  });
+  el.querySelectorAll('.a-toggle').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const i = btn.dataset.i;
+      attendants[i].available = !attendants[i].available;
+      renderPool();
+    });
+  });
+}
+renderPool();
+
+// ---- Skill hierarchy for general ATTENDANT visits ----
+const skillRank = {"BASIC ATTENDANT":1, "TRAINED ATTENDANT":2, "NURSING ASSISTANT":3};
+
+function pickAttendant(requiredSkill, riskTier, serviceType){
+  const availablePool = attendants.filter(a=>a.available);
+
+  // --- MEDICINE DELIVERY: lowest risk, anyone can fulfill, never blocked on skill ---
+  if(serviceType === 'MEDICINE_DELIVERY'){
+    const anyone = availablePool[0];
+    return anyone ? {type:'match', attendant: anyone} : {type:'escalate', attendant:null};
+  }
+
+  // --- CHILDCARE (Regular): needs a Babysitter or Special Needs Caregiver (either qualifies). ---
+  if(serviceType === 'CHILDCARE_REGULAR'){
+    const qualified = availablePool.filter(a => a.skill === 'BABYSITTER' || a.skill === 'SPECIAL NEEDS CAREGIVER');
+    return qualified.length > 0
+      ? {type:'match', attendant: qualified[0]}
+      : {type:'escalate', attendant:null};
+  }
+
+  // --- CHILDCARE (Special Needs): prefers a Special Needs Caregiver.
+  //     Severity-aware fallback — only downgrades to a regular Babysitter for
+  //     lower-complexity cases (GREEN/YELLOW). Higher-complexity cases (self-injury
+  //     risk, elopement risk, complex medical/mobility needs — RED/AMBER) never
+  //     get a silent substitution, same principle as injections/blood draws. ---
+  if(serviceType === 'CHILDCARE_SPECIAL'){
+    const specialQualified = availablePool.filter(a => a.skill === 'SPECIAL NEEDS CAREGIVER');
+    if(specialQualified.length > 0){
+      return {type:'match', attendant: specialQualified[0]};
+    }
+    if(riskTier === 'GREEN' || riskTier === 'YELLOW'){
+      const basic = availablePool.filter(a => a.skill === 'BABYSITTER')[0];
+      if(basic){
+        return {type:'fallback', attendant: basic};
+      }
+    }
+    return {type:'escalate', attendant:null, hardRule: (riskTier === 'RED' || riskTier === 'AMBER')
+      ? 'This case involves higher-complexity needs (e.g. self-injury/elopement risk or complex medical needs) — we never substitute an untrained babysitter here, regardless of wait time.'
+      : undefined};
+  }
+
+  // --- BLOOD COLLECTION: hard rule — only a Phlebotomist or Nursing Assistant may draw blood.
+  //     No fallback to a lower-skilled attendant, ever, regardless of AI-assessed risk tier. ---
+  if(serviceType === 'BLOOD_COLLECTION'){
+    const qualified = availablePool.filter(a => a.skill === 'PHLEBOTOMIST' || a.skill === 'NURSING ASSISTANT');
+    return qualified.length > 0
+      ? {type:'match', attendant: qualified[0]}
+      : {type:'escalate', attendant:null, hardRule:'Blood collection requires a certified phlebotomist or nurse — we never substitute an untrained attendant for this.'};
+  }
+
+  // --- INJECTION: hard rule — only a Nursing Assistant may administer.
+  //     No fallback, no exceptions — this is a fixed business rule, not left to the AI's discretion. ---
+  if(serviceType === 'INJECTION'){
+    const qualified = availablePool.filter(a => a.skill === 'NURSING ASSISTANT');
+    return qualified.length > 0
+      ? {type:'match', attendant: qualified[0]}
+      : {type:'escalate', attendant:null, hardRule:'Injections are only ever given by a qualified Nursing Assistant — we never substitute here, no matter how minor it seems.'};
+  }
+
+  // --- ATTENDANT visit: existing skill-ladder + risk-tier fallback logic ---
+  const requiredRank = skillRank[requiredSkill] || 1;
+  const qualified = availablePool
+    .filter(a=> skillRank[a.skill] && skillRank[a.skill] >= requiredRank)
+    .sort((a,b)=>skillRank[a.skill]-skillRank[b.skill]);
+
+  if(qualified.length > 0){
+    return {type:'match', attendant: qualified[0]};
+  }
+
+  if(riskTier === 'GREEN' || riskTier === 'YELLOW'){
+    const basic = availablePool
+      .filter(a=> skillRank[a.skill])
+      .sort((a,b)=>skillRank[b.skill]-skillRank[a.skill])[0];
+    if(basic){
+      return {type:'fallback', attendant: basic};
+    }
+  }
+  return {type:'escalate', attendant:null};
+}
+
+// ---- AI classification call ----
+async function classifyCase(text, serviceType){
+  const serviceContext = {
+    ATTENDANT: "This is a request for an in-person attendant to assist with mobility, monitoring, or general care.",
+    BLOOD_COLLECTION: "This is a request for a HOME BLOOD SAMPLE COLLECTION. The task checklist should cover things like confirming fasting/prep requirements, verifying patient identity, sample labeling, and cold-chain handling — this always requires a certified phlebotomist or nurse, never a general attendant.",
+    INJECTION: "This is a request for a HOME INJECTION (e.g. B12, insulin, or another prescribed injection). The checklist should cover confirming the prescription, checking for allergies, verifying dosage against the prescription, and post-injection observation for reactions — this always requires a qualified Nursing Assistant, never a general attendant.",
+    MEDICINE_DELIVERY: "This is a request for MEDICINE DELIVERY from a nearby pharmacy. The checklist should cover confirming the prescription/order, verifying the medicines match what was prescribed, and safe handover — this is a low-risk logistics task, not a clinical one.",
+    CHILDCARE_REGULAR: "This is a request for REGULAR CHILDCARE/BABYSITTING — general supervision, meals, play, homework help, bedtime routine for a child with no special needs. The checklist should cover routine, emergency contacts, and any allergies/rules the parent mentioned.",
+    CHILDCARE_SPECIAL: "This is a request for SPECIAL NEEDS CHILDCARE. Classify the SEVERITY of the child's needs using the risk_tier field (see special-needs tier definitions below) — this determines whether a substitute caregiver is ever allowed. The checklist should reflect the specific condition mentioned (e.g. communication method, sensory triggers, mobility needs, medical needs) in plain, actionable language for the caregiver."
+  }[serviceType] || "";
+
+  const specialNeedsTierNote = serviceType === 'CHILDCARE_SPECIAL' ? `
+
+Tier definitions specifically for CHILDCARE_SPECIAL (special needs childcare) — use these instead of the general attendant definitions above:
+RED = self-injury risk, elopement/wandering risk, or a complex medical condition requiring specific trained intervention — never substitute a regular babysitter, always escalate if a Special Needs Caregiver isn't available.
+AMBER = significant behavioral or communication support needs (e.g. non-verbal, uses AAC/communication device, can become seriously overwhelmed/distressed) where a trained caregiver is strongly preferred but a short wait for the right match is safer than a substitution.
+YELLOW = moderate needs (e.g. mild sensory sensitivity, needs extra patience and routine, but no safety risk) — a well-briefed regular babysitter can safely serve with detailed instructions if no Special Needs Caregiver is free.
+GREEN = mild/low support needs (e.g. minor speech delay, needs a bit of extra patience) — a regular babysitter with clear instructions is safe.` : '';
+
+  const systemPrompt = `You are the triage classifier for CHAKRA, a hospital and home patient-assistance dispatch system.
+${serviceContext}
+${specialNeedsTierNote}
+
+Given a family's plain-language description of a patient's needs, return ONLY a JSON object (no markdown fences, no preamble) with this exact structure:
+
+{
+  "risk_tier": "RED" | "AMBER" | "YELLOW" | "GREEN",
+  "risk_reason": "one short sentence explaining the tier",
+  "required_skill": "BASIC ATTENDANT" | "TRAINED ATTENDANT" | "NURSING ASSISTANT" | "PHLEBOTOMIST" | "DELIVERY PARTNER" | "BABYSITTER" | "SPECIAL NEEDS CAREGIVER",
+  "case_summary": "one sentence plain-language summary of the situation",
+  "task_checklist": ["short task 1", "short task 2", "..."],
+  "escalation_note": "one sentence describing what should happen if no qualified person is available right now"
+}
+
+Tier definitions for general attendant visits:
+RED = medication timing is clinically critical, active post-surgical complication risk, or signs of possible medical emergency (confusion, fever, breathing issues) — never substitute an under-qualified attendant, always escalate to a nurse/doctor line if the right person isn't available.
+AMBER = ongoing monitoring of a real medical condition (e.g. insulin timing, post-op mobility, chronic disease) where a trained attendant is needed but brief delay for the right match is acceptable with clear instructions.
+YELLOW = general mobility/basic care assistance for a stable patient, low medical risk, a basic attendant can serve with clear written instructions.
+GREEN = companionship, errands, non-medical support, no health risk if a basic attendant serves immediately.
+
+Note: for BLOOD_COLLECTION and INJECTION service types, always set required_skill to PHLEBOTOMIST/NURSING ASSISTANT or NURSING ASSISTANT respectively, and risk_tier should reflect that these are never downgraded to a lower skill — this is enforced separately regardless of what you set here.
+For CHILDCARE_REGULAR, always set required_skill to BABYSITTER. For CHILDCARE_SPECIAL, always set required_skill to SPECIAL NEEDS CAREGIVER, and use the special-needs tier definitions above (not the general attendant ones) for risk_tier.
+
+Respond with ONLY the JSON object.`;
+
+  const response = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model: "claude-sonnet-4-6",
+      max_tokens: 1000,
+      system: systemPrompt,
+      messages: [{ role: "user", content: text }]
+    })
+  });
+
+  const data = await response.json();
+  const raw = data.content.map(c => c.text || "").join("\n").trim();
+  const cleaned = raw.replace(/^```json/,'').replace(/^```/,'').replace(/```$/,'').trim();
+  return JSON.parse(cleaned);
+}
+
+function tierRowHTML(activeTier){
+  const tiers = ["RED","AMBER","YELLOW","GREEN"];
+  return `<div class="tier-row">` + tiers.map(t=>
+    `<div class="tier-pill ${t} ${t===activeTier ? 'active':''}">${t}</div>`
+  ).join('') + `</div>`;
+}
+
+// ---- Emergency mode: toggle open/close ----
+const emgPanel = document.getElementById('emgPanel');
+const emgChevron = document.getElementById('emgChevron');
+function toggleEmg(forceOpen){
+  const isHidden = emgPanel.classList.contains('hidden');
+  const open = forceOpen !== undefined ? forceOpen : isHidden;
+  emgPanel.classList.toggle('hidden', !open);
+  emgChevron.innerHTML = open ? 'CLOSE &#9652;' : 'OPEN &#9662;';
+}
+document.getElementById('emgToggle').addEventListener('click', ()=>toggleEmg());
+document.getElementById('emgClose').addEventListener('click', (e)=>{ e.stopPropagation(); toggleEmg(false); });
+
+// ---- Emergency bystander guidance: separate from attendant routing entirely ----
+async function getBystanderGuidance(text){
+  const systemPrompt = `You are giving immediate BYSTANDER guidance for someone in India facing a medical emergency, accident, or a safety/security situation (attack, robbery, threat), while professional help (ambulance/fire/police) is on the way. This is NOT for attendant dispatch or scheduling — it is for the next few minutes only, until real help arrives.
+
+Rules:
+- Always assume emergency services are being called separately — never suggest this replaces calling 108/100/112.
+- For MEDICAL situations: only give well-established, safe, layperson-level bystander actions (checking responsiveness and breathing, calling for help, controlling visible bleeding with firm direct pressure, keeping the person still if a spinal/head injury is possible, recovery position if breathing but unconscious, keeping the person calm and warm, clearing a visibly choking airway per standard back-blow/abdominal-thrust guidance for conscious choking).
+- For SECURITY situations (attack, robbery, threat): prioritize personal safety over property or confrontation — get to a safe location, don't pursue or confront anyone, stay on the line with police once called, note identifying details only if it's safe to do so, help others get to safety.
+- NEVER attempt to diagnose the underlying medical cause or condition.
+- NEVER give guidance on medication, dosages, or any invasive medical action.
+- NEVER suggest confronting, restraining, or engaging an attacker — safety and distance always come first.
+- If the description suggests something outside safe bystander action (e.g. suspected heart attack, stroke signs, severe trauma, an ongoing armed threat), say clearly that this needs professional responders right now and keep guidance limited to keeping people safe and calm until they arrive.
+- Keep total steps between 3 and 6, ordered by priority, each one short sentence.
+
+Return ONLY a JSON object, no markdown fences:
+{
+  "situation_note": "one sentence acknowledging what's happening, calm tone",
+  "steps": ["step 1", "step 2", "..."]
+}`;
+
+  const response = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model: "claude-sonnet-4-6",
+      max_tokens: 700,
+      system: systemPrompt,
+      messages: [{ role: "user", content: text }]
+    })
+  });
+
+  const data = await response.json();
+  const raw = data.content.map(c => c.text || "").join("\n").trim();
+  const cleaned = raw.replace(/^```json/,'').replace(/^```/,'').replace(/```$/,'').trim();
+  return JSON.parse(cleaned);
+}
+
+document.getElementById('emgAnalyzeBtn').addEventListener('click', async ()=>{
+  const text = document.getElementById('emgInput').value.trim();
+  const resultEl = document.getElementById('emgResult');
+  const btn = document.getElementById('emgAnalyzeBtn');
+
+  if(!text){
+    resultEl.innerHTML = `<div class="err" style="margin-top:14px;">Please describe what's happening first.</div>`;
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = "Getting guidance…";
+  resultEl.innerHTML = `<div class="loading"><div class="spinner"></div> Preparing bystander steps…</div>`;
+
+  try{
+    const g = await getBystanderGuidance(text);
+    resultEl.innerHTML = `
+      <div class="summary-box" style="margin-top:16px;">${g.situation_note}</div>
+      <ol class="emg-steps">
+        ${g.steps.map(s=>`<li>${s}</li>`).join('')}
+      </ol>
+    `;
+  }catch(err){
+    resultEl.innerHTML = `<div class="err" style="margin-top:14px;">Couldn't reach guidance right now — call 108 or 112 immediately, don't wait. (${err.message})</div>`;
+  }finally{
+    btn.disabled = false;
+    btn.textContent = "Get Immediate Bystander Guidance";
+  }
+});
+
+function wireRatingCards(){
+  document.querySelectorAll('.stars').forEach(starGroup=>{
+    let selected = 0;
+    const stars = starGroup.querySelectorAll('.star');
+    stars.forEach(star=>{
+      star.addEventListener('click', ()=>{
+        selected = parseInt(star.dataset.val);
+        stars.forEach(s=> s.classList.toggle('filled', parseInt(s.dataset.val) <= selected));
+        starGroup.dataset.selected = selected;
+      });
+    });
+  });
+
+  function wireSubmit(btnId, cardId, commentId, starsSelector){
+    const btn = document.getElementById(btnId);
+    btn.addEventListener('click', ()=>{
+      const card = document.getElementById(cardId);
+      const starGroup = card.querySelector(starsSelector);
+      const rating = starGroup.dataset.selected || 0;
+      if(rating == 0){
+        btn.textContent = 'Select at least 1 star first';
+        setTimeout(()=>{ btn.textContent = 'Submit rating'; }, 1500);
+        return;
+      }
+      card.classList.add('submitted');
+      btn.disabled = true;
+      btn.textContent = `✓ Submitted (${rating}★)`;
+    });
+  }
+
+  wireSubmit('submitProviderRating', 'rateProviderCard', 'rateProviderComment', '.stars[data-target="provider"]');
+  wireSubmit('submitUserRating', 'rateUserCard', 'rateUserComment', '.stars[data-target="user"]');
+}
+
+// ---- SLA countdown, tied to the verification gate ----
+let dispatchConfirmed = false;
+let slaIntervalId = null;
+
+function startSlaCountdown(minutes){
+  dispatchConfirmed = false;
+  if(slaIntervalId) clearInterval(slaIntervalId);
+  let remaining = minutes * 60;
+  const badge = document.getElementById('slaBadge');
+  const timerEl = document.getElementById('slaTimer');
+
+  slaIntervalId = setInterval(()=>{
+    if(dispatchConfirmed){
+      clearInterval(slaIntervalId);
+      if(badge){ badge.querySelector('.sla-label').textContent = '✓ Dispatch confirmed within SLA'; }
+      return;
+    }
+    remaining--;
+    if(remaining <= 0){
+      clearInterval(slaIntervalId);
+      if(badge){
+        badge.className = 'sla-badge breach';
+        timerEl.textContent = '00:00';
+        badge.querySelector('.sla-label').textContent = '⚠ SLA BREACHED — auto-escalating to backup attendant / ops team';
+      }
+      return;
+    }
+    const m = Math.floor(remaining/60), s = remaining%60;
+    if(timerEl) timerEl.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    if(badge && remaining <= minutes*60*0.3 && !badge.classList.contains('breach')){
+      badge.classList.add('warn');
+    }
+  }, 1000);
+}
+
+function wireVerificationGate(){
+  let providerVerified = false;
+  let userVerified = false;
+
+  function checkBothVerified(){
+    const banner = document.getElementById('dispatchBanner');
+    if(providerVerified && userVerified){
+      banner.className = 'dispatch-banner confirmed';
+      banner.textContent = '✓ Both sides verified — dispatch confirmed';
+      dispatchConfirmed = true;
+      document.getElementById('ratingSection').classList.remove('hidden');
+      wireRatingCards();
+    }
+  }
+
+  const provBtn = document.getElementById('verifyProviderBtn');
+  provBtn.addEventListener('click', ()=>{
+    provBtn.disabled = true;
+    provBtn.classList.add('pending');
+    provBtn.textContent = 'Scanning…';
+    setTimeout(()=>{
+      providerVerified = true;
+      provBtn.textContent = '✓ Verified';
+      provBtn.classList.remove('pending');
+      document.getElementById('verifyProvider').classList.add('done');
+      checkBothVerified();
+    }, 900);
+  });
+
+  const userBtn = document.getElementById('verifyUserBtn');
+  userBtn.addEventListener('click', ()=>{
+    userBtn.disabled = true;
+    userBtn.classList.add('pending');
+    userBtn.textContent = 'Verifying OTP…';
+    setTimeout(()=>{
+      userVerified = true;
+      userBtn.textContent = '✓ Verified';
+      userBtn.classList.remove('pending');
+      document.getElementById('verifyUser').classList.add('done');
+      checkBothVerified();
+    }, 900);
+  });
+}
+
+let lastResult = null;
+let lastServiceType = null;
+
+function renderOutcome(result, routing, serviceType, extendedInfo){
+  const resultArea = document.getElementById('resultArea');
+  lastResult = result;
+  lastServiceType = serviceType;
+
+  let decisionHTML = '';
+  if(routing.type === 'match'){
+    decisionHTML = `
+      <div class="decision-box match">
+        <div class="decision-title">✓ Matched immediately</div>
+        <div class="decision-body"><strong>${routing.attendant.name}</strong> (${routing.attendant.skill}) is available and meets the required skill level. Dispatching now with the task checklist below.</div>
+      </div>`;
+  } else if(routing.type === 'fallback'){
+    decisionHTML = `
+      <div class="decision-box fallback">
+        <div class="decision-title">⚠ ${extendedInfo && extendedInfo.parentPresent ? 'Parent-present override — Regular Care caregiver' : extendedInfo ? 'Accepted beyond original SLA' : 'Fallback dispatch'}</div>
+        <div class="decision-body">${extendedInfo && extendedInfo.parentPresent
+          ? `Family explicitly confirmed a parent/guardian will remain present throughout. Dispatching <strong>${routing.attendant.name}</strong> (${routing.attendant.skill}) — a Regular Care caregiver, not a Special Needs Caregiver — with detailed AI-generated instructions covering this child's specific needs.`
+          : extendedInfo
+          ? `Family accepted an extended wait. Dispatching <strong>${routing.attendant.name}</strong> (${routing.attendant.skill}), estimated arrival in <strong>~${extendedInfo.etaMinutes} minutes</strong> — beyond the original ${currentLocation ? currentLocation.slaMinutes : ''}-minute SLA, but confirmed by the requester.`
+          : `No ${result.required_skill.toLowerCase()} was available. Since this case is <strong>${result.risk_tier}</strong> risk, routing to <strong>${routing.attendant.name}</strong> (${routing.attendant.skill}) with detailed AI-generated instructions is safe. Family is notified of the substitution.`}</div>
+      </div>`;
+  } else {
+    const showParentOverride = serviceType === 'CHILDCARE_SPECIAL';
+    const consentText = result.risk_tier === 'RED'
+      ? `I understand this involves a <strong>self-injury or elopement/wandering risk</strong>, that a Regular Care caregiver has no training for this, and that I (or another parent/guardian) will remain present and within arm's reach for the entire visit, ready to step in immediately.`
+      : `I understand this child's needs are higher-complexity, and I (or another parent/guardian) will remain present and nearby throughout the visit, ready to step in if needed.`;
+
+    decisionHTML = `
+      <div class="decision-box escalate">
+        <div class="decision-title">✕ No one available within SLA</div>
+        <div class="decision-body">${routing.hardRule ? routing.hardRule : 'No attendant meeting the required skill level is available within your service geofence right now.'} <strong>${result.escalation_note}</strong></div>
+        <div class="escalate-choice">
+          <div class="field-label" style="margin-top:12px;">Your choice</div>
+          <div class="verify-grid">
+            <button class="verify-btn" id="refreshSearchBtn" style="width:100%;">🔁 Refresh — search again for someone within SLA</button>
+            <button class="verify-btn" id="seeNextAvailableBtn" style="width:100%; background:var(--amber);">⏳ See next available (longer wait)</button>
+          </div>
+          <div id="nextAvailableOutput"></div>
+
+          ${showParentOverride ? `
+          <div class="parent-override">
+            <div class="field-label">Or — proceed with a Regular Care caregiver instead</div>
+            <label class="parent-consent-label">
+              <input type="checkbox" id="parentPresentCheck">
+              <span>${consentText}</span>
+            </label>
+            <button class="verify-btn" id="proceedRegularBtn" disabled style="width:100%;">Proceed with Regular Care caregiver</button>
+            <div id="parentOverrideOutput"></div>
+          </div>` : ''}
+        </div>
+      </div>`;
+  }
+
+  let verifyHTML = '';
+  if(routing.type === 'match' || routing.type === 'fallback'){
+    verifyHTML = `
+      <div class="verify-section">
+        <div class="field-label">Step 2 — Verify both sides before dispatch</div>
+        <div class="verify-grid">
+          <div class="verify-card" id="verifyProvider">
+            <div class="v-role">Service Provider</div>
+            <div class="v-icon">🖐️</div>
+            <div style="font-size:12.5px;">${routing.attendant.name}</div>
+            <button class="verify-btn" id="verifyProviderBtn">Simulate biometric scan</button>
+          </div>
+          <div class="verify-card" id="verifyUser">
+            <div class="v-role">Service User</div>
+            <div class="v-icon">📱</div>
+            <div style="font-size:12.5px;">Requesting family</div>
+            <button class="verify-btn" id="verifyUserBtn">Send OTP &amp; verify</button>
+          </div>
+        </div>
+        <div class="dispatch-banner waiting" id="dispatchBanner">Awaiting verification from both sides</div>
+        <div class="policy-note">Verification is required for every single booking — not just once at sign-up. If either party bypasses this app and arranges the visit directly, CHAKRA has no visibility into it and is not responsible for what happens — even if the two people originally connected through this platform.</div>
+
+        <div class="rating-section hidden" id="ratingSection">
+          <div class="field-label" style="margin-top:18px;">Step 3 — After the visit, both sides rate each other</div>
+          <div class="verify-grid">
+            <div class="rate-card" id="rateProviderCard">
+              <div class="v-role">Family rates ${routing.attendant.name}</div>
+              <div class="stars" data-target="provider">
+                ${[1,2,3,4,5].map(n=>`<span class="star" data-val="${n}">★</span>`).join('')}
+              </div>
+              <textarea class="rate-comment" id="rateProviderComment" placeholder="Optional comment — punctual, gentle with patient, etc."></textarea>
+              <button class="verify-btn" id="submitProviderRating">Submit rating</button>
+            </div>
+            <div class="rate-card" id="rateUserCard">
+              <div class="v-role">Attendant rates the family</div>
+              <div class="stars" data-target="user">
+                ${[1,2,3,4,5].map(n=>`<span class="star" data-val="${n}">★</span>`).join('')}
+              </div>
+              <textarea class="rate-comment" id="rateUserComment" placeholder="Optional comment — safe environment, clear instructions, etc."></textarea>
+              <button class="verify-btn" id="submitUserRating">Submit rating</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  resultArea.innerHTML = `
+    ${currentLocation ? `<div class="sla-badge" id="slaBadge"><span class="sla-label">SLA — ${currentLocation.label}</span><span class="sla-timer" id="slaTimer">${String(currentLocation.slaMinutes).padStart(2,'0')}:00</span></div>` : ''}
+    ${tierRowHTML(result.risk_tier)}
+    <div class="field-label">Case Summary</div>
+    <div class="summary-box">${result.case_summary}</div>
+
+    <div class="field-label">Why this tier</div>
+    <div class="summary-box" style="margin-bottom:14px;">${result.risk_reason}</div>
+
+    <span class="skill-req">REQUIRES: ${result.required_skill}</span>
+
+    <div class="field-label">Task Checklist for Attendant</div>
+    <ul class="checklist">
+      ${result.task_checklist.map(t=>`<li><span class="tick"></span>${t}</li>`).join('')}
+    </ul>
+
+    ${decisionHTML}
+    ${verifyHTML}
+  `;
+
+  if(currentLocation && (routing.type === 'match' || routing.type === 'fallback') && !extendedInfo){
+    startSlaCountdown(currentLocation.slaMinutes);
+  }
+
+  if(routing.type === 'match' || routing.type === 'fallback'){
+    wireVerificationGate();
+  }
+
+  if(routing.type === 'escalate'){
+    document.getElementById('refreshSearchBtn').addEventListener('click', ()=>{
+      const newRouting = pickAttendant(result.required_skill, result.risk_tier, serviceType);
+      renderOutcome(result, newRouting, serviceType);
+    });
+    document.getElementById('seeNextAvailableBtn').addEventListener('click', ()=>{
+      showNextAvailable(result, serviceType);
+    });
+
+    const parentCheck = document.getElementById('parentPresentCheck');
+    if(parentCheck){
+      const proceedBtn = document.getElementById('proceedRegularBtn');
+      parentCheck.addEventListener('change', ()=>{
+        proceedBtn.disabled = !parentCheck.checked;
+      });
+      proceedBtn.addEventListener('click', ()=>{
+        const availableBabysitter = attendants.filter(a=>a.available && a.skill === 'BABYSITTER')[0];
+        const out = document.getElementById('parentOverrideOutput');
+        if(!availableBabysitter){
+          out.innerHTML = `<div class="err" style="margin-top:8px;">No Regular Care babysitter is available right now either — try refresh or see next available instead.</div>`;
+          return;
+        }
+        const routing = {type:'fallback', attendant: availableBabysitter};
+        renderOutcome(result, routing, serviceType, {parentPresent:true});
+      });
+    }
+  }
+}
+
+function showNextAvailable(result, serviceType){
+  const out = document.getElementById('nextAvailableOutput');
+  // Look across the FULL pool (including currently unavailable) for the best qualifying match
+  const candidates = attendants.filter(a=>{
+    if(serviceType === 'BLOOD_COLLECTION') return a.skill === 'PHLEBOTOMIST' || a.skill === 'NURSING ASSISTANT';
+    if(serviceType === 'INJECTION') return a.skill === 'NURSING ASSISTANT';
+    if(serviceType === 'MEDICINE_DELIVERY') return true;
+    if(serviceType === 'CHILDCARE_REGULAR') return a.skill === 'BABYSITTER' || a.skill === 'SPECIAL NEEDS CAREGIVER';
+    if(serviceType === 'CHILDCARE_SPECIAL') return a.skill === 'SPECIAL NEEDS CAREGIVER';
+    return !!skillRank[a.skill];
+  });
+
+  if(candidates.length === 0){
+    out.innerHTML = `<div class="err" style="margin-top:10px;">No qualified attendant exists in the network for this service yet — this needs ops team escalation, not just a wait.</div>`;
+    return;
+  }
+
+  const chosen = candidates[Math.floor(Math.random()*candidates.length)];
+  const baseEta = currentLocation ? currentLocation.slaMinutes : 20;
+  const etaMinutes = baseEta + 15 + Math.floor(Math.random()*30); // realistically beyond SLA
+
+  out.innerHTML = `
+    <div class="summary-box" style="margin-top:10px;">
+      Next available: <strong>${chosen.name}</strong> (${chosen.skill}) — estimated arrival in <strong>~${etaMinutes} minutes</strong>.
+    </div>
+    <button class="verify-btn" id="acceptExtendedBtn" style="background:var(--green);">Accept this — dispatch ${chosen.name} now</button>
+  `;
+
+  document.getElementById('acceptExtendedBtn').addEventListener('click', ()=>{
+    const routing = {type:'fallback', attendant: chosen};
+    renderOutcome(result, routing, serviceType, {etaMinutes});
+  });
+}
+
+document.getElementById('analyzeBtn').addEventListener('click', async ()=>{
+  const rawText = document.getElementById('caseInput').value.trim();
+  const text = selectedTime ? `${rawText} (Needed: ${selectedTime})` : rawText;
+  const resultArea = document.getElementById('resultArea');
+  const btn = document.getElementById('analyzeBtn');
+
+  if(!rawText){
+    resultArea.innerHTML = `<div class="err">Please describe the situation first.</div>`;
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = "Analyzing…";
+  resultArea.innerHTML = `<div class="loading"><div class="spinner"></div> Running AI triage classification…</div>`;
+
+  try{
+    const result = await classifyCase(text, selectedService);
+    const routing = pickAttendant(result.required_skill, result.risk_tier, selectedService);
+    renderOutcome(result, routing, selectedService);
+  }catch(err){
+    resultArea.innerHTML = `<div class="err">Something went wrong reaching the classifier: ${err.message}. Try again in a moment.</div>`;
+  }finally{
+    btn.disabled = false;
+    btn.textContent = "Analyze & Route";
+  }
+});// =====================================================================
+// PATENT-RELEVANT MODULE 1: Verified Dispatch Token
+// Binds biometric confirmation + live GPS coordinate + timestamp into a
+// single cryptographic hash. The technical claim: this token cannot be
+// replayed or reconstructed after the fact — it only exists because the
+// biometric scan and the geolocation read happened at the same instant,
+// on the same device, for this specific dispatch.
+// =====================================================================
+async function generateVerifiedDispatchToken(){
+  const outputEl = document.getElementById('tokenOutput');
+  outputEl.innerHTML = `<div class="loading"><div class="spinner"></div> Reading device location and biometric sensor…</div>`;
+
+  // Simulated biometric confirmation (in production: WebAuthn platform authenticator / device fingerprint API)
+  const simulatedBiometricConfirmation = "BIO-CONFIRMED-" + Math.random().toString(36).substring(2, 10).toUpperCase();
+  const timestamp = new Date().toISOString();
+
+  function buildToken(lat, lng, accuracy){
+    const payload = `${simulatedBiometricConfirmation}|${lat}|${lng}|${timestamp}`;
+    const encoder = new TextEncoder();
+    const data = encoder.encode(payload);
+    return crypto.subtle.digest('SHA-256', data).then(hashBuffer=>{
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+      outputEl.innerHTML = `
+        <div class="token-card">
+          <div class="token-row"><span class="k">Biometric confirmation</span><span>${simulatedBiometricConfirmation}</span></div>
+          <div class="token-row"><span class="k">GPS coordinate</span><span>${lat.toFixed(5)}, ${lng.toFixed(5)} (±${Math.round(accuracy)}m)</span></div>
+          <div class="token-row"><span class="k">Timestamp</span><span>${timestamp}</span></div>
+          <div class="token-row"><span class="k">Binding hash (SHA-256)</span><span></span></div>
+          <div class="token-hash">${hashHex}</div>
+        </div>
+        <div class="token-note">This hash is a one-way binding of the three inputs above at this exact moment — change any one input (wrong location, replayed biometric, altered time) and the hash will not match. This is the specific technical mechanism worth describing to a patent attorney: not "OTP + biometric" as two separate checks, but a single cryptographic artifact that only exists if all three occurred together.</div>
+      `;
+    });
+  }
+
+  if(navigator.geolocation){
+    navigator.geolocation.getCurrentPosition(
+      (pos)=> buildToken(pos.coords.latitude, pos.coords.longitude, pos.coords.accuracy),
+      ()=> buildToken(12.9716, 77.5946, 50) // fallback simulated coordinate if permission denied
+    );
+  } else {
+    buildToken(12.9716, 77.5946, 50);
+  }
+}
+document.getElementById('genTokenBtn').addEventListener('click', generateVerifiedDispatchToken);
+
+
+// =====================================================================
+// PATENT-RELEVANT MODULE 2: Autonomous Sensor-Triggered Escalation
+// A simulated wearable vitals stream feeds continuously into the SAME
+// escalation pathway used by the manual emergency panel. No user input
+// is required to trigger it — the system itself detects the breach and
+// initiates escalation, which is the technical claim: sensor data used
+// as a direct, autonomous trigger into an existing dispatch/escalation
+// engine, not just a display of numbers for a human to interpret.
+// =====================================================================
+let hr = 78, spo2 = 98, crisisMode = false, vitalsAlertFired = false;
+
+function renderVitals(){
+  document.getElementById('hrNum').textContent = hr;
+  document.getElementById('spo2Num').textContent = spo2;
+  const hrBox = document.getElementById('hrBox');
+  const spo2Box = document.getElementById('spo2Box');
+  const hrAlert = hr > 130 || hr < 45;
+  const spo2Alert = spo2 < 90;
+  hrBox.classList.toggle('alert', hrAlert);
+  spo2Box.classList.toggle('alert', spo2Alert);
+
+  if((hrAlert || spo2Alert) && !vitalsAlertFired){
+    vitalsAlertFired = true;
+    fireAutonomousEscalation(hr, spo2);
+  }
+  if(!hrAlert && !spo2Alert){
+    vitalsAlertFired = false;
+    document.getElementById('autoEscalationOutput').innerHTML = '';
+  }
+}
+
+function vitalsTick(){
+  if(crisisMode){
+    hr = Math.min(hr + Math.floor(Math.random()*8), 165);
+    spo2 = Math.max(spo2 - Math.floor(Math.random()*2), 78);
+  } else {
+    hr = Math.max(65, Math.min(95, hr + Math.floor(Math.random()*5) - 2));
+    spo2 = Math.max(95, Math.min(99, spo2 + Math.floor(Math.random()*2) - 1));
+  }
+  renderVitals();
+}
+setInterval(vitalsTick, 1500);
+
+function fireAutonomousEscalation(hrVal, spo2Val){
+  document.getElementById('autoEscalationOutput').innerHTML = `
+    <div class="auto-escalation-banner">
+      <div class="ae-title">⚠ AUTONOMOUS ESCALATION TRIGGERED — no human action required</div>
+      <div style="font-size:13px; line-height:1.5;">
+        Sensor stream detected HR ${hrVal} bpm / SpO2 ${spo2Val}% — outside safe threshold.
+        CHAKRA has automatically initiated the same RED-tier escalation pathway used by the manual emergency panel:
+        ambulance dispatch alert queued, family notified, nearest verified Nursing Assistant paged.
+        This trigger required zero taps — the sensor data itself is the input to the dispatch engine.
+      </div>
+    </div>
+  `;
+}
+
+document.getElementById('crisisBtn').addEventListener('click', ()=>{ crisisMode = true; });
+document.getElementById('resetVitalsBtn').addEventListener('click', ()=>{
+  crisisMode = false; hr = 78; spo2 = 98; vitalsAlertFired = false;
+  renderVitals();
+  document.getElementById('autoEscalationOutput').innerHTML = '';
+});
+renderVitals();
+</script>
+
+<div id="ghNote" style="position:fixed;left:0;right:0;bottom:0;z-index:9999;background:#14302e;color:#fff;font:13px/1.4 Arial,sans-serif;padding:8px 12px;text-align:center">
+Working parts on this page: the sensor-triggered escalation demo and the verified check-in token. The AI classification step (Analyze &amp; Route and bystander guidance) runs only in the full version and is switched off here.
+</div>
+<script>
+(function(){
+  var msg = '<div class="err" style="margin-top:14px;">The AI classification step is switched off on this page. Try the sensor-triggered escalation demo and the verified check-in token further down.</div>';
+  function off(id, outId){
+    var b = document.getElementById(id); if(!b) return;
+    b.addEventListener('click', function(e){
+      e.stopImmediatePropagation(); e.preventDefault();
+      var o = document.getElementById(outId); if(o) o.innerHTML = msg;
+    }, true);
+    b.style.opacity = '0.6';
+  }
+  off('analyzeBtn','resultArea');
+  off('emgAnalyzeBtn','emgResult');
+})();
+</script>
+</body>
+</html>
