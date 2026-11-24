@@ -1,2 +1,8 @@
-# chakra-pih-watch
-CHAKRA PIH Watch: design walkthrough for NESFIC-D-23
+# CHAKRA PIH Watch
+
+Design walkthrough video for NESFIC 2026, challenge NESFIC-D-23 (early detection of pregnancy-induced hypertension).
+
+- `chakra_pih_watch_demo.mp4`: 54-second walkthrough
+- `index.html`: page that plays the video
+
+Status: escalation engine is a working prototype on simulated data. PIH screens are wireframes with sample data. No clinical validation and no pilot yet.
